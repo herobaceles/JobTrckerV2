@@ -39,7 +39,6 @@ class TokenPayload(BaseModel):
 
 
 # 6. Legacy/Standalone Google Verification Route
-# (Tip: If you have an auth router, this should ideally be moved inside routers/auth.py later!)
 @app.post("/api/auth/google")
 def verify_google_token(payload: TokenPayload):
     try:
@@ -59,11 +58,15 @@ def verify_google_token(payload: TokenPayload):
         print("============================")
 
         user_name = id_info.get("name")
+        user_email = id_info.get("email")
 
+        # 🛠️ FIXED: Wrapped status_code in quotes & added id context keys for NextAuth
         return {
-            status_code: 200,
+            "status_code": 200,
             "status": "success",
             "message": f"Successfully verified {user_name} on Python backend.",
+            "user_id": user_email,            # NextAuth maps this to token.userId
+            "google_id": id_info.get("sub")   # NextAuth maps this to token.googleId
         }
 
     except Exception as e:
