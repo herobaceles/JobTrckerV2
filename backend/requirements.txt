@@ -3,3 +3,5 @@ uvicorn
 pymongo
 pydantic
 python-dotenv
+google-auth
+google-auth-oauthlib
