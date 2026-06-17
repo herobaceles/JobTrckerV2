@@ -3,10 +3,17 @@ from dotenv import load_dotenv
 from pathlib import Path
 from motor.motor_asyncio import AsyncIOMotorClient
 
-# Load environment variables
-load_dotenv(Path(__file__).parent.parent / ".env")
+# 1. Try loading the local file (this will safely fail silently in production)
+env_path = Path(__file__).parent.parent / ".env"
+if env_path.exists():
+    load_dotenv(env_path)
 
-MONGO_DETAILS = os.getenv("MONGO_URL", "mongodb://localhost:27017")
+# 2. Grab the MONGO_URL from the system environment
+# 🛠️ FIX: Added a strict check. If MONGO_URL is missing, it will crash immediately instead of running silently with old cache!
+MONGO_DETAILS = os.getenv("MONGO_URL")
+
+if not MONGO_DETAILS:
+    raise ValueError("CRITICAL ERROR: MONGO_URL environment variable is completely missing or empty!")
 
 # Initialize Client
 client = AsyncIOMotorClient(MONGO_DETAILS)
