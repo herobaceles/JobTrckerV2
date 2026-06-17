@@ -1,0 +1,43 @@
+# ====================================================================
+# DEPENDENCIES (Never commit these - they make the repo huge)
+# ====================================================================
+node_modules/
+backend/node_modules/
+frontend/node_modules/
+
+# ====================================================================
+# ENVIRONMENT VARIABLES & SECRETS (Keep your API keys safe!)
+# ====================================================================
+.env
+.env.*
+backend/.env
+backend/.env.*
+frontend/.env.local
+frontend/.env.local*
+
+# ====================================================================
+# BACKEND SPECIFIC (Python virtual environments & caches)
+# ====================================================================
+.venv/
+venv/
+ENV/
+__pycache__/
+*.pyc
+backend/__pycache__/
+backend/*.pyc
+
+# ====================================================================
+# FRONTEND SPECIFIC (Next.js build output)
+# ====================================================================
+.next/
+frontend/.next/
+out/
+build/
+
+# ====================================================================
+# SYSTEM JUNK (OS specific hidden files)
+# ====================================================================
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
