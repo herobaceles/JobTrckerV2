@@ -265,14 +265,15 @@ export default function DashboardPage() {
       <main className="flex-1 min-w-0 overflow-y-auto h-screen p-5 md:p-8 space-y-8 bg-white">
         <div className="flex items-center justify-between gap-4 border-b pb-5">
           <div>
-            <h1 className="text-xl font-bold tracking-tight text-black">Good morning, {session?.user?.name?.split(" ")[0] || "Hunter"}! 👋</h1>
+            <h1 className="text-xl font-bold tracking-tight text-black">Hi!, {session?.user?.name?.split(" ")[0] || "Hunter"}! 👋</h1>
             <p className="text-xs text-black mt-0.5">Here's what's happening with your job search today.</p>
           </div>
           <div className="flex items-center gap-3">
-            <button className="p-2 bg-white border border-black text-black transition relative rounded-none">
+            {/* for future na tinatamad pako maglagay notif */}
+            {/* <button className="p-2 bg-white border border-black text-black transition relative rounded-none">
               <Bell className="w-4 h-4" />
               <span className="absolute top-1 right-1 w-1.5 h-1.5 bg-black" />
-            </button>
+            </button> */} 
           </div>
         </div>
 
@@ -322,6 +323,7 @@ export default function DashboardPage() {
                         onAddJob={handleAddJob} 
                         onDeleteJob={handleDeleteJob} 
                         onUpdateJob={handleUpdateJob} 
+                        onViewAll={() => setActiveTab("applications")}
                       />
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <AnalyticsSection jobs={applications} />

@@ -15,6 +15,7 @@ interface ApplicationsProps {
   onAddJob?: (newJobData: Omit<ExtendedJob, "id">) => Promise<void>;
   onUpdateJob?: (id: string, updatedFields: Partial<ExtendedJob>) => Promise<void>;
   onDeleteJob?: (id: string) => Promise<void>;
+  onViewAll?: () => void;
 }
 
 export default function ApplicationsSection({ 
@@ -22,7 +23,8 @@ export default function ApplicationsSection({
   isPreview = false, 
   onAddJob, 
   onUpdateJob, 
-  onDeleteJob 
+  onDeleteJob,
+  onViewAll
 }: ApplicationsProps) {
   const [showForm, setShowForm] = useState(false);
   const [isDeletingId, setIsDeletingId] = useState<string | null>(null);
@@ -155,10 +157,14 @@ export default function ApplicationsSection({
         
         <div className="flex items-center gap-3 w-full sm:w-auto justify-between sm:justify-end">
           {isPreview && jobs.length > 0 && !showForm && (
-            <span className="text-xs font-bold cursor-pointer underline hover:text-black uppercase">
-              View all
-            </span>
-          )}
+  <button
+    type="button"
+    onClick={onViewAll} // This triggers the state change to the applications view!
+    className="text-xs font-bold cursor-pointer underline hover:text-black uppercase bg-transparent border-none p-0"
+  >
+    View all
+  </button>
+)}
           <button
             onClick={() => setShowForm(!showForm)}
             className="px-3 py-1.5 text-xs font-bold bg-black text-white hover:bg-white hover:text-black border border-white transition uppercase tracking-wide rounded-none"
