@@ -25,7 +25,8 @@ app.add_middleware(
 )
 
 # 4. Import and include your modular API routers
-from config.database import ping_database
+# 🛠️ FIXED: Imported 'users_collection' directly from your config file
+from config.database import ping_database, users_collection 
 from routers import auth, application, calendar
 
 app.include_router(auth.router)
@@ -39,9 +40,8 @@ class TokenPayload(BaseModel):
 
 
 # 6. Legacy/Standalone Google Verification Route
-# (Tip: If you have an auth router, this should ideally be moved inside routers/auth.py later!)
 @app.post("/api/auth/google")
-def verify_google_token(payload: TokenPayload):
+async def verify_google_token(payload: TokenPayload):
     try:
         # Verify Google ID token
         id_info = id_token.verify_oauth2_token(
@@ -59,11 +59,31 @@ def verify_google_token(payload: TokenPayload):
         print("============================")
 
         user_name = id_info.get("name")
+        user_email = id_info.get("email")
 
+        # 🛠️ DATABASE LOOKUP: Query your native users_collection directly
+        user_doc = await users_collection.find_one({"email": user_email})
+        
+        if user_doc:
+            db_user_id = str(user_doc["_id"])  # Grabs the "6a2eb..." hash string
+        else:
+            # Auto-register new users into MongoDB collection if logging in for the first time
+            new_user = {
+                "name": user_name,
+                "email": user_email,
+                "google_id": id_info.get("sub"),
+                "picture": id_info.get("picture")
+            }
+            result = await users_collection.insert_one(new_user)
+            db_user_id = str(result.inserted_id)
+
+        # 🛠️ SUCCESS: Pass back the exact native identifierNextAuth is expecting
         return {
-            status_code: 200,
+            "status_code": 200,
             "status": "success",
             "message": f"Successfully verified {user_name} on Python backend.",
+            "user_id": db_user_id,             # NextAuth maps this directly to token.userId!
+            "google_id": id_info.get("sub")
         }
 
     except Exception as e:
