@@ -35,7 +35,7 @@ export default function Navbar() {
           <span className="h-4 w-px bg-gray-200" aria-hidden="true" />
 
           {/* AUTH STATE */}
-          {status === "loading" ? null : isLoggedIn ? (
+          {/* {status === "loading" ? null : isLoggedIn ? (
             <button
               onClick={() => signOut()}
               className="text-red-600 hover:text-red-700 transition font-medium"
@@ -49,7 +49,7 @@ export default function Navbar() {
             >
               Login
             </Link>
-          )}
+          ) } */}
         </div>
 
         {/* Mobile Button */}
